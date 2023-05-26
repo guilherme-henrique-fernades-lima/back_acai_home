@@ -1,16 +1,24 @@
 from django.db import models
 
-# Create your models here.
 
-"""
-class Test(models.Model):
+class Pedidos(models.Model):
     id = models.BigAutoField(primary_key=True)
-    datetime = models.DateTimeField(auto_now_add=True)
-    decimal = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True)
-    varchar = models.CharField(max_length=80, blank=True, null=True)
-    #payload = JSONField(blank=True, null=True)
+    idCliente = models.BigIntegerField(null=True)
+    data = models.DateField(null=True)
+    hora = models.TimeField(null=True)
+    status = models.CharField(max_length=20, null=True)
+    valor = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    formaPagamento = models.CharField(max_length=20, null=True)
+    observacao = models.CharField(max_length=255, null=True)
+    idEmpresa = models.BigIntegerField(null=True)
+    taxaentrega = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    trocopara = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    formaEntrega = models.IntegerField(null=True)
+    valorcartao = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    idEndereco = models.BigIntegerField(null=True)
+    numColher = models.IntegerField(default=0)
+    celular = models.CharField(max_length=20, null=True)
 
     class Meta:
         managed = False
-        db_table = 'teste'
-"""
+        db_table = 'pedido'
