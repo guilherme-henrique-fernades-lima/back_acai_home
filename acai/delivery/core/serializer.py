@@ -1,9 +1,8 @@
-"""
 from rest_framework import serializers
 from delivery.core.models import *
 
-class TestMS(serializers.ModelSerializer):
+
+class PedidosMS(serializers.ModelSerializer):
     class Meta:
-        model = Test
+        model = Pedidos
         fields = '__all__'
-"""
