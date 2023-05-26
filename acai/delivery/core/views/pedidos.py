@@ -3,11 +3,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from delivery.core.models import *
-from delivery.core.serializer import *
+from delivery.core.models import Pedidos 
+from delivery.core.serializer import PedidosMS 
 
 
-"""
 class PedidosViewSet(viewsets.ModelViewSet):
     queryset = Pedidos.objects.all()
     serializer_class = PedidosMS
@@ -17,16 +16,21 @@ class PedidosViewSet(viewsets.ModelViewSet):
         serializer = super().get_serializer_class()
         return serializer
 
-    @action(detail=False, methods=['get'], url_path='pedidos')
-    def pedidos(self, request):
+    def list(self, request):
 
-        data = []
+        pedidos = Pedidos.objects.using('PHP').all()
+        data = PedidosMS(pedidos, many=True).data
 
         if not data:
-            return Response(data={'success': False, 'message': 'Sem motivos encontrados.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(data=data, status=status.HTTP_200_OK)
+
 """
+Exemplos
+@action(detail=False, methods=['get'], url_path='pedidos')
+def pedidos(self, request):
+    pass
 
 class PedidosViewSet(viewsets.ViewSet):
 
@@ -38,3 +42,4 @@ class PedidosViewSet(viewsets.ViewSet):
         data = {'data': 'retornando os pedidos...'}
 
         return Response(data=data, status=status.HTTP_200_OK)
+"""
