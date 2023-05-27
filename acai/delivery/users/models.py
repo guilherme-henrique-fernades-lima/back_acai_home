@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     nr_matricula = models.DecimalField(max_digits=8, decimal_places=0, unique=True)
     funcao = models.CharField(db_index=True, max_length=255)
     created = models.DateTimeField(default=timezone.now)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'nr_matricula'

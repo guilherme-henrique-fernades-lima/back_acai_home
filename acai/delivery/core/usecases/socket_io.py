@@ -34,8 +34,8 @@ class SocketIO():
 
     async def start_server(self, data=None):
 
-        resp = requests.get(WS_ATOMUS_URL)
-        await self.sio.connect(WS_ATOMUS_URL)
+        resp = requests.get(WS_URL)
+        await self.sio.connect(WS_URL)
 
         tasks = [asyncio.create_task(self.send_message(data))]
         await asyncio.gather(*tasks)
@@ -44,7 +44,7 @@ class SocketIO():
 
         try:
 
-            if data['tp_evento'] == 'ws-atomus-configs':
+            if data['tp_evento'] == 'ws-name':
                 new_data = {"event":"NAME", "payload": data['payload']}
 
             asyncio.get_event_loop().run_until_complete(self.start_server(data=new_data))
