@@ -75,6 +75,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'delivery.wsgi.application'
 
+# VARIAVEIS DE AMBIENTE
+WS_URL = config("WS_URL")
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

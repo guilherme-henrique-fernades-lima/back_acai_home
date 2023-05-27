@@ -4,6 +4,7 @@ import requests
 import traceback
 import json
 from django.utils import timezone
+from delivery.settings import WS_URL
 
 
 class SocketIO():
@@ -53,3 +54,9 @@ class SocketIO():
         except Exception as err:
             print(traceback.print_exc())
             raise
+
+if __name__ == '__main__':
+    from delivery.core.usecases.socket_io import SocketIO
+    websocket = SocketIO()
+    data = {'tp_evento': '', 'payload': {}}
+    websocket.execute(data)
