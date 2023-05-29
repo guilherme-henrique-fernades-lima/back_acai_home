@@ -43,6 +43,8 @@ class SocketIO():
 
     def execute(self, data=None):
 
+        print("DATA>>>", data, "\n", WS_URL)
+
         try:
 
             if data['tp_evento'] == 'ws-name':
@@ -58,5 +60,5 @@ class SocketIO():
 if __name__ == '__main__':
     from delivery.core.usecases.socket_io import SocketIO
     websocket = SocketIO()
-    data = {'tp_evento': '', 'payload': {}}
+    data = {'tp_evento': 'ws-name', 'payload': {}}
     websocket.execute(data)
