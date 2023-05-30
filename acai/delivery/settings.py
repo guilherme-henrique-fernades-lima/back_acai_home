@@ -92,17 +92,6 @@ DATABASES = {
     },
 }
 
-"""
-    'PHP': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config("DB_PHP_NAME"),
-        'USER': config("DB_USER"),
-        'PASSWORD': config("DB_PHP_PASSWORD"),
-        'HOST': config("DB_HOST"),
-        'PORT': config("DB_PORT"),
-    },
-"""
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

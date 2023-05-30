@@ -18,7 +18,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
 
-        pedidos = Pedidos.objects.using('PHP').all()
+        pedidos = Pedidos.objects.filter(data="2023-05-29")
         data = PedidosMS(pedidos, many=True).data
 
         if not data:
