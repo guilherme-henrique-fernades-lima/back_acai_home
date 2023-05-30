@@ -47,8 +47,8 @@ class SocketIO():
 
         try:
 
-            if data['tp_evento'] == 'ws-name':
-                new_data = {"event":"NAME", "payload": data['payload']}
+            if data['tp_evento'] == 'NOVO_PEDIDO':
+                new_data = {"event": "NOVO_PEDIDO", "payload": data['payload']}
 
             asyncio.get_event_loop().run_until_complete(self.start_server(data=new_data))
             asyncio.get_event_loop().run_until_complete(self.sio.disconnect())
@@ -60,5 +60,5 @@ class SocketIO():
 if __name__ == '__main__':
     from delivery.core.usecases.socket_io import SocketIO
     websocket = SocketIO()
-    data = {'tp_evento': 'ws-name', 'payload': {}}
+    data = {'tp_evento': 'NOVO_PEDIDO', 'payload': {'abc': 'def'}}
     websocket.execute(data)
