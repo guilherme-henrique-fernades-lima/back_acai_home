@@ -6,6 +6,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from delivery.core.models import Pedidos 
 from delivery.core.serializer import PedidosMS 
 
+import pandas as pd
+from datetime import datetime
+
 
 class PedidosViewSet(viewsets.ModelViewSet):
     queryset = Pedidos.objects.all()
@@ -18,28 +21,21 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
 
-        pedidos = Pedidos.objects.filter(data="2023-05-29")
-        data = PedidosMS(pedidos, many=True).data
+        date = request.GET.get("date", datetime.now().date())
 
-        if not data:
-            return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            pedidos = Pedidos.objects.filter(data=date).order_by('-data', '-hora')
+            data = PedidosMS(pedidos, many=True).data
 
-        return Response(data=data, status=status.HTTP_200_OK)
+            if not data:
+                return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)
 
-"""
-Exemplos
-@action(detail=False, methods=['get'], url_path='pedidos')
-def pedidos(self, request):
-    pass
+            df_pedidos = pd.DataFrame(data)
+            contagem_status = df_pedidos['status'].value_counts()
 
-class PedidosViewSet(viewsets.ViewSet):
+            new_data = {'data': data, 'status': contagem_status.to_dict()}
 
-    permission_classes = (IsAuthenticated,)
+            return Response(data=new_data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['get'], url_path='teste')
-    def pedidos(self, request):
-
-        data = {'data': 'retornando os pedidos...'}
-
-        return Response(data=data, status=status.HTTP_200_OK)
-"""
+        except Exception as err:
+            return Response(data={'success': False, 'message': err}, status=status.HTTP_400_BAD_REQUEST)
