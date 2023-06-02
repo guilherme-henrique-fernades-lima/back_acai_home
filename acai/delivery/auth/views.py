@@ -25,6 +25,10 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
 
     def create(self, request, *args, **kwargs):
 
+        data = request.data
+
+        data['nr_matricula'] = int(data['username'])
+
         serializer = self.get_serializer(data=request.data)
 
         try:
