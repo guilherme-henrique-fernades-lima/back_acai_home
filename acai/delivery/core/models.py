@@ -22,3 +22,30 @@ class Pedidos(models.Model):
     class Meta:
         managed = False
         db_table = 'pedido'
+
+class Categoria(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    descricao = models.CharField(max_length=255, null=True)
+    ativo = models.IntegerField(default=1)
+    idEmpresa = models.BigIntegerField(null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'categoria'
+
+class Produtos(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    descricao = models.CharField(max_length=500, null=True)
+    valor = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    validade = models.DateField(null=True)
+    ativo = models.IntegerField(null=True)
+    imagem = models.CharField(max_length=255, null=True)
+    idCategoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, db_column='idCategoria', related_name='produtos')
+    titulo = models.CharField(max_length=255, null=True)
+    idEmpresa = models.BigIntegerField(null=True)
+    limiteopc = models.IntegerField(null=True)
+    exibeopc = models.IntegerField(default=10)
+
+    class Meta:
+        managed = False
+        db_table = 'produto'
