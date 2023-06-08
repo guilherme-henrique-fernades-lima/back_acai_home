@@ -3,8 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from delivery.core.models import Pedidos 
-from delivery.core.serializer import PedidosMS 
+from delivery.core.models import Pedidos
+from delivery.core.serializer import PedidosMS
 
 import pandas as pd
 from datetime import datetime
