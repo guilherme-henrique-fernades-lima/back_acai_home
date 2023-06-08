@@ -32,6 +32,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
             df_pedidos = pd.DataFrame(data)
             contagem_status = df_pedidos['status'].value_counts()
+            total = contagem_status.sum()
+            contagem_status['TOTAL'] = total
 
             new_data = {'data': data, 'status': contagem_status.to_dict()}
 
