@@ -49,3 +49,17 @@ class Produtos(models.Model):
     class Meta:
         managed = False
         db_table = 'produto'
+
+class PedidoProduto(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    idPedido = models.BigIntegerField(null=True)
+    idProduto = models.BigIntegerField(null=True)
+    quantidade = models.IntegerField(null=True)
+    valorTotal = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    obs = models.CharField(max_length=255, null=True)
+    numColher = models.IntegerField(default=1)
+    #pedido = models.ForeignKey(Pedidos, on_delete=models.CASCADE, related_name='produtos')
+
+    class Meta:
+        managed = False
+        db_table = 'pedido_produto'
