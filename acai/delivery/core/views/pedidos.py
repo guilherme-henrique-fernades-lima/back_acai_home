@@ -1,3 +1,6 @@
+import pandas as pd
+from datetime import datetime
+
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -5,9 +8,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from delivery.core.models import Pedidos
 from delivery.core.serializer import PedidosMS
-
-import pandas as pd
-from datetime import datetime
+from delivery.core.usecases.pedidos import CasePedidos
 
 
 class PedidosViewSet(viewsets.ModelViewSet):
@@ -22,10 +23,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
     def list(self, request):
 
         date = request.GET.get("date", datetime.now().date())
+        status_pedido = request.GET.get("status")
+        forma_pagamento = request.GET.get("tp_pag")
 
         try:
-            pedidos = Pedidos.objects.filter(data=date).order_by('-data', '-hora')
-            data = PedidosMS(pedidos, many=True).data
+            pedido = CasePedidos()
+            data = pedido.get_all(date, status_pedido, forma_pagamento)
 
             if not data:
                 return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)
@@ -40,4 +43,5 @@ class PedidosViewSet(viewsets.ModelViewSet):
             return Response(data=new_data, status=status.HTTP_200_OK)
 
         except Exception as err:
+            print("ERROR>>>", err)
             return Response(data={'success': False, 'message': err}, status=status.HTTP_400_BAD_REQUEST)
