@@ -16,3 +16,8 @@ class CategoriaMS(serializers.ModelSerializer):
     class Meta:
         model = Categoria 
         fields = '__all__'
+
+class PedidoProdutoMS(serializers.ModelSerializer):
+    class Meta:
+        model = PedidoProduto 
+        fields = '__all__'
