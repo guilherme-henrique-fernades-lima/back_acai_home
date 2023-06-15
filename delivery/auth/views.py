@@ -34,7 +34,7 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
             raise InvalidToken(e.args[0])
 
         user = serializer.validated_data['user']
-        model_user = User.objects.get(nr_matricula=user['nr_matricula'])
+        model_user = User.objects.get(cpf=user['cpf'])
         user['token'] = serializer.validated_data['access']
         user['refresh'] = serializer.validated_data['refresh']
 
@@ -50,11 +50,11 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
     permission_classes = (AllowAny,)
     http_method_names = ['post']
 
-    def create(self, request, nr_matricula=None, session_time=None, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
 
         data = request.data
 
-        if User.objects.filter(nr_matricula=data['nr_matricula']).exists():
+        if User.objects.filter(cpf=data['cpf']).exists():
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         serializer = self.get_serializer(data=data)
