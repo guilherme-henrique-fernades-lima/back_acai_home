@@ -1,7 +1,5 @@
-#from ecommerce.users.models import User
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-#from rolepermissions.permissions import available_perm_status
 
 User = get_user_model()
 
