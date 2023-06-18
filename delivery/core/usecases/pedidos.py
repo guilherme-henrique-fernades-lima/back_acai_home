@@ -73,6 +73,7 @@ class CasePedidos():
                   JOIN bairro b
                     ON e.bairro = b.id 
                  WHERE p.data = '{date}'
+                   AND p.formaEntrega = 1
                    AND p.status NOT IN ('CANCELADO', 'CONCLUIDO', 'ENVIADO') 
               ORDER BY p.data, p.hora
                   DESC;
