@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 from datetime import datetime
 
@@ -28,8 +29,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
         forma_pagamento = request.GET.get("tp_pag")
 
         try:
-            pedido = CasePedidos()
-            data = pedido.get_all(date, status_pedido, forma_pagamento)
+            pedido_rep = CasePedidos()
+            data = pedido_rep.get_all(date, status_pedido, forma_pagamento)
 
             if not data:
                 return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)
@@ -48,13 +49,13 @@ class PedidosViewSet(viewsets.ModelViewSet):
             return Response(data={'success': False, 'message': err}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'], url_path='pendentes')
-    def pendentes(self, request):
+    def pedidos_pendentes(self, request):
 
         date = request.GET.get("date", datetime.now().date())
 
         try:
-            pedido = CasePedidos()
-            data = pedido.get_open_orders(date)
+            pedido_rep = CasePedidos()
+            data = pedido_rep.get_open_orders(date)
 
             if not data:
                 return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)
@@ -64,3 +65,95 @@ class PedidosViewSet(viewsets.ModelViewSet):
         except Exception as err:
             print("ERROR>>>", err)
             return Response(data={'success': False, 'message': err}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], url_path='entrega')
+    def pedidos_entrega(self, request):
+
+        date = request.GET.get("date", datetime.now().date())
+
+        try:
+            pedido_rep = CasePedidos()
+            data = pedido_rep.get_entrega(date)
+
+            if not data:
+                return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        except Exception as err:
+            print("ERROR>>>", err)
+            return Response(data={'success': False, 'message': err}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'], url_path='enviar')
+    def enviar_pedidos(self, request):
+
+        data = request.data
+
+        try:
+            if data:
+                pedido_rep = CasePedidos()
+
+                insert_error = []
+                for pedido in data['pedidos']:
+
+                    date = datetime.now()
+                    payload = {
+                        'data': date.date(),
+                        'hora': date.time(),
+                        'idPedido': pedido,
+                        'status': 'ATRIBUIDO',
+                        'cpf_motorista': data['cpf_motorista'],
+                        'motorista': data['motorista'],
+                        'cpf_user': data['cpf_user'],
+                        'usuario': data['usuario']
+                    }
+
+                    atribuir_ped = pedido_rep.envia_pedido(payload)
+
+                    if not atribuir_ped['success']:
+                        insert_error += [pedido]
+
+                return Response(data={"errors": insert_error}, status=status.HTTP_200_OK)
+
+            return Response(data={'success': False, 'message': 'nenhum pedido informado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as err:
+            print("ERROR>>>", err)
+            return Response(data={'sucess': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'], url_path='remover')
+    def remover_pedidos(self, request):
+
+        data = request.data
+
+        try:
+            if data:
+                pedido_rep = CasePedidos()
+
+                insert_error = []
+                for pedido in data['pedidos']:
+
+                    date = datetime.now()
+                    payload = {
+                        'data': date.date(),
+                        'hora': date.time(),
+                        'idPedido': pedido,
+                        'status': 'REMOVIDO',
+                        'cpf_motorista': data['cpf_motorista'],
+                        'motorista': data['motorista'],
+                        'cpf_user': data['cpf_user'],
+                        'usuario': data['usuario']
+                    }
+
+                    atribuir_ped = pedido_rep.remove_pedido(payload)
+
+                    if not atribuir_ped['success']:
+                        insert_error += [pedido]
+
+                return Response(data={"errors": insert_error}, status=status.HTTP_200_OK)
+
+            return Response(data={'success': False, 'message': 'nenhum pedido informado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as err:
+            print("ERROR>>>", err)
+            return Response(data={'sucess': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
