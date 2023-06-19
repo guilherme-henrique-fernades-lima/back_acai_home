@@ -46,7 +46,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         except Exception as err:
             print("ERROR>>>", err)
-            return Response(data={'success': False, 'message': err}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'], url_path='pendentes')
     def pedidos_pendentes(self, request):
@@ -64,7 +64,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         except Exception as err:
             print("ERROR>>>", err)
-            return Response(data={'success': False, 'message': err}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'], url_path='entrega')
     def pedidos_entrega(self, request):
@@ -82,7 +82,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         except Exception as err:
             print("ERROR>>>", err)
-            return Response(data={'success': False, 'message': err}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['post'], url_path='enviar')
     def enviar_pedidos(self, request):
@@ -119,7 +119,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         except Exception as err:
             print("ERROR>>>", err)
-            return Response(data={'sucess': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['post'], url_path='remover')
     def remover_pedidos(self, request):
@@ -156,4 +156,37 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         except Exception as err:
             print("ERROR>>>", err)
-            return Response(data={'sucess': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'], url_path='finalizar')
+    def finalizar_pedido(self, request):
+
+        data = request.data
+
+        try:
+            if data:
+                pedido_rep = CasePedidos()
+
+                date = datetime.now()
+                payload = {
+                    'data': date.date(),
+                    'hora': date.time(),
+                    'idPedido': data['idPedido'],
+                    'status': 'CONCLUIDO',
+                    'cpf_motorista': data['cpf_motorista'],
+                    'motorista': data['motorista'],
+                    'observacao': data['observacao']
+                }
+
+                finalizar = pedido_rep.finalizar_pedido(payload)
+
+                if not finalizar['success']:
+                    return Response(data={'success': False, 'message': finalizar['message']}, status=status.HTTP_400_BAD_REQUEST)
+
+                return Response(data={'success': True, 'message': 'Pedido finalizado com sucesso!'}, status=status.HTTP_200_OK)
+
+            return Response(data={'success': False, 'message': 'nenhum pedido informado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as err:
+            print("ERROR>>>", err)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)

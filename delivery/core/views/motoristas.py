@@ -12,6 +12,8 @@ from delivery.core.usecases.motoristas import CaseMotoristas
 
 class MotoristasViewSet(viewsets.ViewSet):
 
+    permission_classes = (IsAuthenticated,)
+
     @action(detail=False, methods=['get'], url_path='ativos')
     def motoristas_ativos(self, request):
 
@@ -26,7 +28,7 @@ class MotoristasViewSet(viewsets.ViewSet):
 
         except Exception as err:
             print("ERROR>>>", err)
-            return Response(data={'success': False, 'message': err}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'], url_path='disponiveis')
     def motoristas_disponiveis(self, request):
@@ -42,4 +44,23 @@ class MotoristasViewSet(viewsets.ViewSet):
 
         except Exception as err:
             print("ERROR>>>", err)
-            return Response(data={'success': False, 'message': err}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], url_path='pedidos')
+    def pedidos_motorista(self, request):
+
+        date = request.GET.get("date", datetime.now().date())
+        motorista = request.GET.get("cpf_motorista")
+
+        try:
+            motoristas = CaseMotoristas()
+            data = motoristas.get_pedidos(date=date, cpf_motorista=motorista)
+
+            if not data:
+                return Response(data={'success': False, 'message': 'nenhum pedido atribuido ao motorista.'}, status=status.HTTP_404_NOT_FOUND)
+
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        except Exception as err:
+            print("ERROR>>>", err)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
