@@ -39,3 +39,35 @@ class CaseMotoristas():
             data = dictfetchall(cursor)
 
         return data if data else [] 
+
+    def get_pedidos(self, date, cpf_motorista):
+        """ BUSCA TODOS OS PEDIDOS ATRIBUIDO AO MOTORISTA """
+
+        with connections["default"].cursor() as cursor:
+
+            sql_pendentes = f"""
+                SELECT * FROM pedido_entrega
+                WHERE data = '{date}'
+                AND status = 'ATRIBUIDO'
+                AND cpf_motorista = {cpf_motorista};
+            """
+
+            sql_concluidos = f"""
+                SELECT * FROM pedido_entrega
+                WHERE data = '{date}'
+                AND status = 'CONCLUIDO'
+                AND cpf_motorista = {cpf_motorista};
+            """
+
+            cursor.execute(sql_pendentes)
+            pendentes = dictfetchall(cursor)
+
+            cursor.execute(sql_concluidos)
+            concluidos = dictfetchall(cursor)
+
+            data = {
+                'pendentes': pendentes if pendentes else [],
+                'concluidos': concluidos if concluidos else []
+            }
+
+        return data
