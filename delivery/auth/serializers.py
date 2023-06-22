@@ -29,7 +29,8 @@ class LoginSerializer(TokenObtainPairSerializer):
 
 class RegistrationSerializer(UserSerializer):
     password = serializers.CharField(max_length=128, min_length=8, write_only=True, required=True)
-    cpf = serializers.DecimalField(required=True, write_only=True, decimal_places=0, max_digits=11)
+    cpf = serializers.CharField(max_length=11, write_only=True, required=True)
+    #cpf = serializers.DecimalField(required=True, write_only=True, decimal_places=0, max_digits=11)
 
     class Meta:
         model = User

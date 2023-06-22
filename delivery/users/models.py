@@ -43,7 +43,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(db_index=True, max_length=255)
     email = models.EmailField(db_index=True, null=True, blank=True)
-    cpf = models.DecimalField(max_digits=11, decimal_places=0, unique=True)
+    #cpf = models.DecimalField(max_digits=11, decimal_places=0, unique=True)
+    cpf = models.CharField(max_length=11, null=True, unique=True)
     funcao = models.CharField(db_index=True, max_length=255)
     created = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=False)
