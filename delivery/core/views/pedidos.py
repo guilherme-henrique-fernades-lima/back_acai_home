@@ -29,8 +29,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
         forma_pagamento = request.GET.get("tp_pag")
 
         try:
-            pedido_rep = CasePedidos()
-            data = pedido_rep.get_all(date, status_pedido, forma_pagamento)
+            pedido_case = CasePedidos()
+            data = pedido_case.get_pedidos(date, status_pedido, forma_pagamento)
 
             if not data:
                 return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)
