@@ -43,7 +43,6 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(db_index=True, max_length=255)
     email = models.EmailField(db_index=True, null=True, blank=True)
-    #cpf = models.DecimalField(max_digits=11, decimal_places=0, unique=True)
     cpf = models.CharField(max_length=11, null=True, unique=True)
     funcao = models.CharField(db_index=True, max_length=255)
     created = models.DateTimeField(default=timezone.now)
@@ -58,6 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     estado = models.CharField(max_length=10, null=True)
     avatar = models.CharField(max_length=100, null=True)
     observacao = models.TextField(null=True)
+    celular = models.CharField(max_length=20, null=True, default=None)
 
     USERNAME_FIELD = 'cpf'
     REQUIRED_FIELDS = []
