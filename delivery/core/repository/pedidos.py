@@ -10,10 +10,10 @@ class RepoPedidos():
 
         filtros = ""
         if status_pedido: 
-            filtros += "AND p.status = '{status}'"
+            filtros += f"AND p.status = '{status}'"
 
         if forma_pagamento: 
-            filtros += "AND p.formaPagamento = '{forma_pagamento}'"
+            filtros += f"AND p.formaPagamento = '{forma_pagamento}'"
 
         with connections["default"].cursor() as cursor:
 
