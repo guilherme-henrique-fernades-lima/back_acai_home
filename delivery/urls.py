@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from delivery.core.views import pedidos, motoristas 
+from delivery.core.views import pedidos, motoristas, home 
 
 router = DefaultRouter()
 
@@ -26,6 +26,7 @@ router.register(r'motoristas', motoristas.MotoristasViewSet, basename='motorista
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home.index, name="index"),
     path('', include('django.contrib.auth.urls')),
     path('integration/', include(router.urls)),
     path('integration/', include(('delivery.users.routers', 'users'), namespace='users-api')),
