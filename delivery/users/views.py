@@ -35,6 +35,23 @@ class UserViewSet(viewsets.ViewSet):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    def post(self, request):
+
+        try:
+            data = request.data
+
+            user = User.objects.get(cpf=data['cpf'])
+            serializer = UserSerializer(user, data=data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
     def delete(self, request, pk):
 
         try:
@@ -48,12 +65,17 @@ class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='change/password')
     def change_pwd(self, request):
 
-        user = User.objects.get(id=data['user_id'])
+        try:
+            data = request.data
+            user = User.objects.get(cpf=data['cpf'])
 
-        if user.check_password(data['oldPassword']):
-            user.set_password(data['password'])
-            user.save()
+            if user.check_password(data['oldPassword']):
+                user.set_password(data['password'])
+                user.save()
 
-            return Response(status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_200_OK)
 
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
