@@ -8,7 +8,7 @@ class UserManager(BaseUserManager):
     def create_user(self, username=None, password=None, cpf=None, funcao=None, \
                           email=None, cep=None, logradouro=None, numLogr=None, \
                           complLogr=None, bairro=None, cidade=None, estado=None, \
-                          avatar=None, observacao=None, **kwargs):
+                          avatar=None, observacao=None,  celular=None, **kwargs):
 
         if username is None:
             raise TypeError('Informe o username.')
@@ -18,7 +18,7 @@ class UserManager(BaseUserManager):
         user = self.model(username=username, cpf=cpf, funcao=funcao, \
                           email=email, cep=cep, logradouro=logradouro, \
                           numLogr=numLogr, complLogr=complLogr, bairro=bairro, \
-                          cidade=cidade, estado=estado, avatar=avatar, observacao=observacao)
+                          cidade=cidade, estado=estado, avatar=avatar, observacao=observacao, celular=celular)
         user.set_password(password)
         user.save(using=self._db)
 
