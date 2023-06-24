@@ -25,7 +25,13 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
 
     def create(self, request, *args, **kwargs):
 
+        print("VIEW DE LOGIN>>>")
+
+        print("REQUEST>>>", request)
+
         data = request.data
+
+        print("DATA>>>", data)
         serializer = self.get_serializer(data=request.data)
 
         try:
