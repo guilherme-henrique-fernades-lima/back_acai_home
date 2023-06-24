@@ -11,6 +11,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from delivery.core.models import Pedidos
 from delivery.core.serializer import PedidosMS
 from delivery.core.usecases.pedidos import CasePedidos
+from delivery.core.repository.pedidos import RepoPedidos
 
 
 class PedidosViewSet(viewsets.ModelViewSet):
@@ -54,8 +55,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
         date = request.GET.get("date", datetime.now().date())
 
         try:
-            pedido_case = CasePedidos()
-            data = pedido_case.get_pedidos_pendentes(date)
+            pedido_rep = RepoPedidos()
+            #pedido_case = CasePedidos()
+            #data = pedido_case.get_pedidos_pendentes(date)
+            data = pedido_rep.get_open_orders(date)
 
             if not data:
                 return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)

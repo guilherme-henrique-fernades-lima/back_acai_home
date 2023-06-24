@@ -73,7 +73,8 @@ class RepoPedidos():
                        #e.cep, e.cidade, e.estado,
                        e.logradouro, e.numLogr, e.complLogr, e.pontoreferencia,
                        b.nome as "bairro"
-                  FROM pedido p
+                  #FROM pedido p
+                  FROM gtech_pedidos p
                   LEFT JOIN cliente c
                     ON p.idCliente = c.id
                   LEFT JOIN endereco e
