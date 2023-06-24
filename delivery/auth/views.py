@@ -28,17 +28,15 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
 
         print("VIEW DE LOGIN>>>")
 
-        print("REQUEST>>>", request)
+        print("REQUEST>>>", type(request.data), request.data)
 
         try:
-            data = request.data
-
-            print("DATA>>>", data)
             serializer = self.get_serializer(data=request.data)
 
         except Exception as err:
             print('ERROR>>>>', err)
             print(traceback.print_exc())
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         try:
             serializer.is_valid(raise_exception=True)
