@@ -27,9 +27,6 @@ class CasePedidos():
 
     def associar_produtos_pedido(self, pedidos, produtos):
 
-        print("PEDIDOS>>>", len(pedidos))
-        print("PRODUTOS>>>", len(produtos))
-
         if not pedidos:
             return pedidos
 
@@ -45,8 +42,6 @@ class CasePedidos():
             for ped in pedidos:
                 ped.update({'produtos': new_produtos[ped['id']]})
                 data += [ped]
-
-            print("STEP 02>>>", data)
 
             return data
 
