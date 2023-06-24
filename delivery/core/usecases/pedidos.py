@@ -12,14 +12,23 @@ class CasePedidos():
         pedidos = self.pedidos_rep.get_all(date, status_pedido, forma_pagamento)
         produtos = self.pedidos_rep.get_all_produtos(date)
 
-        if pedidos:
-            data = self.associar_produtos_pedido(pedidos, produtos)
+        data = self.associar_produtos_pedido(pedidos, produtos)
 
-            return data
+        return data
 
-        return pedidos
+    def get_pedidos_pendentes(self, date):
+
+        pedidos = self.pedidos_rep.get_open_orders(date)
+        produtos = self.pedidos_rep.get_all_produtos(date)
+
+        data = self.associar_produtos_pedido(pedidos, produtos)
+
+        return data
 
     def associar_produtos_pedido(self, pedidos, produtos):
+
+        if not pedidos:
+            return pedidos
 
         try:
             new_produtos = {}

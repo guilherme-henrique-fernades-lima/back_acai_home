@@ -54,8 +54,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
         date = request.GET.get("date", datetime.now().date())
 
         try:
-            pedido_rep = CasePedidos()
-            data = pedido_rep.get_open_orders(date)
+            pedido_case = CasePedidos()
+            data = pedido_case.get_pedidos_pendentes(date)
 
             if not data:
                 return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)
