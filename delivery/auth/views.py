@@ -1,3 +1,4 @@
+import traceback
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -29,10 +30,15 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
 
         print("REQUEST>>>", request)
 
-        data = request.data
+        try:
+            data = request.data
 
-        print("DATA>>>", data)
-        serializer = self.get_serializer(data=request.data)
+            print("DATA>>>", data)
+            serializer = self.get_serializer(data=request.data)
+
+        except Exception as err:
+            print('ERROR>>>>', err)
+            print(traceback.print_exc())
 
         try:
             serializer.is_valid(raise_exception=True)
