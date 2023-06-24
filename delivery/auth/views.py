@@ -1,3 +1,4 @@
+import json
 import traceback
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
@@ -28,9 +29,11 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
 
         print("VIEW DE LOGIN>>>")
 
-        print("REQUEST>>>", type(request.data), request.data)
+        print("REQUEST>>>", request)
 
         try:
+            data = request.data
+            print("DATA>>>", data)
             serializer = self.get_serializer(data=request.data)
 
         except Exception as err:
