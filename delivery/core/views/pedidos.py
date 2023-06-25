@@ -61,7 +61,14 @@ class PedidosViewSet(viewsets.ModelViewSet):
             if not data:
                 return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)
 
-            return Response(data=data, status=status.HTTP_200_OK)
+            df_pedidos = pd.DataFrame(data)
+            contagem_status = df_pedidos['status'].value_counts()
+            total = contagem_status.sum()
+            contagem_status['TOTAL'] = total
+
+            new_data = {'data': data, 'status': contagem_status.to_dict()}
+
+            return Response(data=new_data, status=status.HTTP_200_OK)
 
         except Exception as err:
             print("ERROR>>>", err)
