@@ -108,12 +108,12 @@ class RepoPedidos():
 
         return data if data else [] 
 
-    def envia_pedido(self, payload):
+    def enviar_pedido(self, payload):
         """ ADICIONA PEDIDO PARA ROTA DE ENTREGA """
 
         sql_insert = f"""
-            INSERT INTO pedido_entrega (idPedido, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
-                 VALUES ({payload['idPedido']}, '{payload['data']}', '{payload['hora']}', '{payload['status']}',
+            INSERT INTO pedido_entrega (idPedido, cliente, celular, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
+                 VALUES ({payload['idPedido']}, '{payload['cliente']}', '{payload['celular']}', '{payload['data']}', '{payload['hora']}', '{payload['status']}',
                          {payload['cpf_motorista']}, '{payload['motorista']}', {payload['cpf_user']}, '{payload['usuario']}');
         """
 
@@ -147,12 +147,12 @@ class RepoPedidos():
 
         return {'success': True, 'message': 'operacao realizada com sucesso!'} 
 
-    def remove_pedido(self, payload):
+    def remover_pedido(self, payload):
         """ REMOVE PEDIDO DE ROTA ENTREGA """
 
         sql_insert = f"""
-            INSERT INTO pedido_entrega (idPedido, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
-                 VALUES ({payload['idPedido']}, '{payload['data']}', '{payload['hora']}', '{payload['status']}',
+            INSERT INTO pedido_entrega (idPedido, cliente, celular, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
+                 VALUES ({payload['idPedido']}, '{payload['cliente']}', '{payload['celular']}', '{payload['data']}', '{payload['hora']}', '{payload['status']}',
                          {payload['cpf_motorista']}, '{payload['motorista']}', {payload['cpf_user']}, '{payload['usuario']}');
         """
 
@@ -190,8 +190,8 @@ class RepoPedidos():
         """ FINALIZA PEDIDO DA ROTA DE ENTREGA """
 
         sql_insert = f"""
-            INSERT INTO pedido_entrega (idPedido, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
-                 VALUES ({payload['idPedido']}, '{payload['data']}', '{payload['hora']}', '{payload['status']}',
+            INSERT INTO pedido_entrega (idPedido, cliente, celular, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
+                 VALUES ({payload['idPedido']}, '{payload['cliente']}', '{payload['celular']}', '{payload['data']}', '{payload['hora']}', '{payload['status']}',
                          {payload['cpf_motorista']}, '{payload['motorista']}', NULL, NULL);
         """
 
@@ -224,3 +224,20 @@ class RepoPedidos():
             return f'Erro: {str(e)}'
 
         return {'success': True, 'message': 'operacao realizada com sucesso!'}
+
+    def get_cliente_from_pedido(self, id_pedido):
+        """ BUSCA INFORMACOES DO CLIENTE ATRAVES DO idPedido """
+
+        with connections["default"].cursor() as cursor:
+
+            _sql = f"""
+                SELECT c.* FROM pedido p 
+                  JOIN cliente c
+                    ON p.idCliente = c.id
+                 WHERE p.id = {id_pedido};
+            """
+
+            cursor.execute(_sql)
+            data = dictfetchall(cursor)
+
+        return data[0] if data else [] 

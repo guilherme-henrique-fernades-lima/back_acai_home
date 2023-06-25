@@ -99,29 +99,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         try:
             if data:
-                pedido_rep = RepoPedidos()
+                pedido_case = CasePedidos()
+                response = pedido_case.enviar_pedido(data)
 
-                insert_error = []
-                for pedido in data['pedidos']:
-
-                    date = datetime.now()
-                    payload = {
-                        'data': date.date(),
-                        'hora': date.time(),
-                        'idPedido': pedido,
-                        'status': 'ATRIBUIDO',
-                        'cpf_motorista': data['cpf_motorista'],
-                        'motorista': data['motorista'],
-                        'cpf_user': data['cpf_user'],
-                        'usuario': data['usuario']
-                    }
-
-                    atribuir_ped = pedido_rep.envia_pedido(payload)
-
-                    if not atribuir_ped['success']:
-                        insert_error += [pedido]
-
-                return Response(data={"errors": insert_error}, status=status.HTTP_200_OK)
+                return Response(data={"errors": response}, status=status.HTTP_200_OK)
 
             return Response(data={'success': False, 'message': 'nenhum pedido informado.'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -136,29 +117,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         try:
             if data:
-                pedido_rep = RepoPedidos()
+                pedido_case = CasePedidos()
+                response = pedido_case.remover_pedido(data)
 
-                insert_error = []
-                for pedido in data['pedidos']:
-
-                    date = datetime.now()
-                    payload = {
-                        'data': date.date(),
-                        'hora': date.time(),
-                        'idPedido': pedido,
-                        'status': 'REMOVIDO',
-                        'cpf_motorista': data['cpf_motorista'],
-                        'motorista': data['motorista'],
-                        'cpf_user': data['cpf_user'],
-                        'usuario': data['usuario']
-                    }
-
-                    atribuir_ped = pedido_rep.remove_pedido(payload)
-
-                    if not atribuir_ped['success']:
-                        insert_error += [pedido]
-
-                return Response(data={"errors": insert_error}, status=status.HTTP_200_OK)
+                return Response(data={"errors": response}, status=status.HTTP_200_OK)
 
             return Response(data={'success': False, 'message': 'nenhum pedido informado.'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -173,25 +135,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         try:
             if data:
-                pedido_rep = RepoPedidos()
+                pedido_case = CasePedidos()
+                response = pedido_case.finalizar_pedido(data)
 
-                date = datetime.now()
-                payload = {
-                    'data': date.date(),
-                    'hora': date.time(),
-                    'idPedido': data['idPedido'],
-                    'status': 'CONCLUIDO',
-                    'cpf_motorista': data['cpf_motorista'],
-                    'motorista': data['motorista'],
-                    'observacao': data['observacao']
-                }
-
-                finalizar = pedido_rep.finalizar_pedido(payload)
-
-                if not finalizar['success']:
-                    return Response(data={'success': False, 'message': finalizar['message']}, status=status.HTTP_400_BAD_REQUEST)
-
-                return Response(data={'success': True, 'message': 'Pedido finalizado com sucesso!'}, status=status.HTTP_200_OK)
+                return Response(data=response, status=status.HTTP_200_OK)
 
             return Response(data={'success': False, 'message': 'nenhum pedido informado.'}, status=status.HTTP_404_NOT_FOUND)
 
