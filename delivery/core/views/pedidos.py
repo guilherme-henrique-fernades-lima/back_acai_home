@@ -11,6 +11,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from delivery.core.models import Pedidos
 from delivery.core.serializer import PedidosMS
 from delivery.core.usecases.pedidos import CasePedidos
+from delivery.core.repository.pedidos import RepoPedidos
 
 
 class PedidosViewSet(viewsets.ModelViewSet):
@@ -72,7 +73,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         date = request.GET.get("date", datetime.now().date())
 
         try:
-            pedido_rep = CasePedidos()
+            pedido_rep = RepoPedidos()
             data = pedido_rep.get_entrega(date)
 
             if not data:
@@ -91,7 +92,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         try:
             if data:
-                pedido_rep = CasePedidos()
+                pedido_rep = RepoPedidos()
 
                 insert_error = []
                 for pedido in data['pedidos']:
@@ -128,7 +129,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         try:
             if data:
-                pedido_rep = CasePedidos()
+                pedido_rep = RepoPedidos()
 
                 insert_error = []
                 for pedido in data['pedidos']:
@@ -165,7 +166,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         try:
             if data:
-                pedido_rep = CasePedidos()
+                pedido_rep = RepoPedidos()
 
                 date = datetime.now()
                 payload = {
