@@ -99,8 +99,9 @@ class RepoPedidos():
         with connections["default"].cursor() as cursor:
 
             _sql = f"""
-                SELECT * FROM pedido_entrega
-                 WHERE data = '{date}';
+                SELECT * FROM pedido_entrega pe
+                 WHERE pe.status NOT IN ('REMOVIDO', 'CONCLUIDO')
+                   AND pe.data = '{date}';
             """
 
             cursor.execute(_sql)
