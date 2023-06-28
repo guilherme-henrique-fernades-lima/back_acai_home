@@ -1,5 +1,6 @@
 from datetime import datetime
 from delivery.core.repository.pedidos import RepoPedidos
+from delivery.core.usecases.motoristas import CaseMotoristas
 
 
 class CasePedidos():
@@ -25,6 +26,20 @@ class CasePedidos():
         data = self.associar_produtos_pedido(pedidos, produtos)
 
         return data
+
+    def add_produtos_motorista(self, date, cpf_motorista):
+
+        motoristas_case = CaseMotoristas()
+        pedidos = motoristas_case.get_pedidos(date, cpf_motorista)
+
+        data = {
+            'pendentes': pendentes if pendentes else [],
+            'concluidos': concluidos if concluidos else []
+        }
+
+        produtos = self.pedidos_rep.get_all_produtos(date)
+
+        data = self.associar_produtos_pedido(pedidos['pendentes'], produtos)
 
     def associar_produtos_pedido(self, pedidos, produtos):
 

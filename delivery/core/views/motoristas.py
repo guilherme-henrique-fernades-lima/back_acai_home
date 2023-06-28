@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from delivery.core.usecases.motoristas import CaseMotoristas
+from delivery.core.repository.motoristas import RepoMotoristas
 
 
 class MotoristasViewSet(viewsets.ViewSet):
@@ -18,7 +19,7 @@ class MotoristasViewSet(viewsets.ViewSet):
     def motoristas_ativos(self, request):
 
         try:
-            motoristas = CaseMotoristas()
+            motoristas = RepoMotoristas()
             data = motoristas.get_all()
 
             if not data:
@@ -34,7 +35,7 @@ class MotoristasViewSet(viewsets.ViewSet):
     def motoristas_disponiveis(self, request):
 
         try:
-            motoristas = CaseMotoristas()
+            motoristas = RepoMotoristas()
             data = motoristas.get_disponiveis()
 
             if not data:
@@ -54,7 +55,7 @@ class MotoristasViewSet(viewsets.ViewSet):
 
         try:
             motoristas = CaseMotoristas()
-            data = motoristas.get_pedidos(date=date, cpf_motorista=motorista)
+            data = motoristas.add_produtos_motorista(date=date, cpf_motorista=motorista)
 
             if not data:
                 return Response(data={'success': False, 'message': 'nenhum pedido atribuido ao motorista.'}, status=status.HTTP_404_NOT_FOUND)
