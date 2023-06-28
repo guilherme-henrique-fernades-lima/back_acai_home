@@ -1,9 +1,10 @@
+import json
 import asyncio
 import socketio
 import requests
 import traceback
-import json
 from django.utils import timezone
+
 from delivery.settings import WS_URL
 
 
@@ -38,24 +39,24 @@ class SocketIO():
         resp = requests.get(WS_URL)
         await self.sio.connect(WS_URL)
 
-        tasks = [asyncio.create_task(self.send_message(data))]
+        tasks = [
+            self.send_message(data),
+            self.sio.disconnect()
+        ]
+
         await asyncio.gather(*tasks)
 
     def execute(self, data=None):
 
-        print("DATA>>>", data, "\n", WS_URL)
+        print("DISPATCH EVENT WEBSOCKET>>>", data)
 
         try:
-
-            if data['tp_evento'] == 'NOVO_PEDIDO':
-                new_data = {"event": "NOVO_PEDIDO", "payload": data['payload']}
-
-            asyncio.get_event_loop().run_until_complete(self.start_server(data=new_data))
-            asyncio.get_event_loop().run_until_complete(self.sio.disconnect())
+            asyncio.run(self.start_server(data=data))
 
         except Exception as err:
             print(traceback.print_exc())
-            raise
+            #raise
+            pass
 
 if __name__ == '__main__':
     from delivery.core.usecases.socket_io import SocketIO

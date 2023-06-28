@@ -12,6 +12,7 @@ from delivery.core.models import Pedidos
 from delivery.core.serializer import PedidosMS
 from delivery.core.usecases.pedidos import CasePedidos
 from delivery.core.repository.pedidos import RepoPedidos
+from delivery.core.utils import dispatch_event_socket
 
 
 class PedidosViewSet(viewsets.ModelViewSet):
@@ -100,6 +101,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 pedido_case = CasePedidos()
                 response = pedido_case.enviar_pedido(data)
 
+                dispatch_event_socket(tp_evento="NEW_ORDER_DELIVERY", payload=data)
                 return Response(data={"errors": response}, status=status.HTTP_200_OK)
 
             return Response(data={'success': False, 'message': 'nenhum pedido informado.'}, status=status.HTTP_404_NOT_FOUND)
@@ -118,6 +120,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 pedido_case = CasePedidos()
                 response = pedido_case.remover_pedido(data)
 
+                dispatch_event_socket(tp_evento="REMOVE_ORDER_DELIVERY", payload=data)
                 return Response(data={"errors": response}, status=status.HTTP_200_OK)
 
             return Response(data={'success': False, 'message': 'nenhum pedido informado.'}, status=status.HTTP_404_NOT_FOUND)
@@ -136,6 +139,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 pedido_case = CasePedidos()
                 response = pedido_case.finalizar_pedido(data)
 
+                dispatch_event_socket(tp_evento="FINISH_ORDER_DELIVERY", payload=data)
                 return Response(data=response, status=status.HTTP_200_OK)
 
             return Response(data={'success': False, 'message': 'nenhum pedido informado.'}, status=status.HTTP_404_NOT_FOUND)
