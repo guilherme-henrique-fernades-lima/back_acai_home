@@ -1,6 +1,5 @@
 from datetime import datetime
 from delivery.core.repository.pedidos import RepoPedidos
-from delivery.core.usecases.motoristas import CaseMotoristas
 
 
 class CasePedidos():
@@ -12,41 +11,26 @@ class CasePedidos():
     def get_pedidos(self, date, status_pedido, forma_pagamento):
 
         pedidos = self.pedidos_rep.get_all(date, status_pedido, forma_pagamento)
-        produtos = self.pedidos_rep.get_all_produtos(date)
-
-        data = self.associar_produtos_pedido(pedidos, produtos)
+        data = self.associar_produtos_pedido(pedidos)
 
         return data
 
-    def get_pedidos_pendentes(self, date):
+    def get_pedidos_pendentes(self):
 
-        pedidos = self.pedidos_rep.get_open_orders(date)
-        produtos = self.pedidos_rep.get_all_produtos(date)
-
-        data = self.associar_produtos_pedido(pedidos, produtos)
+        pedidos = self.pedidos_rep.get_open_orders()
+        data = self.associar_produtos_pedido(pedidos)
 
         return data
 
-    def add_produtos_motorista(self, date, cpf_motorista):
-
-        motoristas_case = CaseMotoristas()
-        pedidos = motoristas_case.get_pedidos(date, cpf_motorista)
-
-        data = {
-            'pendentes': pendentes if pendentes else [],
-            'concluidos': concluidos if concluidos else []
-        }
-
-        produtos = self.pedidos_rep.get_all_produtos(date)
-
-        data = self.associar_produtos_pedido(pedidos['pendentes'], produtos)
-
-    def associar_produtos_pedido(self, pedidos, produtos):
+    def associar_produtos_pedido(self, pedidos):
 
         if not pedidos:
             return pedidos
 
         try:
+            pedidos_array = [x['id'] for x in pedidos]
+            produtos = self.pedidos_rep.get_all_produtos(pedidos_array)
+
             new_produtos = {}
             for item in produtos:
                 if new_produtos.get(item['idPedido']):

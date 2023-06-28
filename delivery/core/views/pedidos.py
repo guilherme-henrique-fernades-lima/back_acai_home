@@ -52,11 +52,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='pendentes')
     def pedidos_pendentes(self, request):
 
-        date = request.GET.get("date", datetime.now().date())
-
         try:
             pedido_case = CasePedidos()
-            data = pedido_case.get_pedidos_pendentes(date)
+            data = pedido_case.get_pedidos_pendentes()
 
             if not data:
                 return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)

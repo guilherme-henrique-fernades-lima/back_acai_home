@@ -12,19 +12,20 @@ class CaseMotoristas():
     def add_produtos_motorista(self, date, cpf_motorista):
 
         pedidos = self.motoristas_rep.get_pedidos(date, cpf_motorista)
-        dt_pedido = pedidos['pendentes'][0]['dt_pedido'] if pedidos['pendentes'][0] else pedidos['concluidos'][0]['dt_pedido']
-        produtos = self.pedidos_rep.get_all_produtos(dt_pedido)
-
-        data = self.associar_produtos_pedido(pedidos, produtos)
+        data = self.associar_produtos_pedido(pedidos)
 
         return data
 
-    def associar_produtos_pedido(self, pedidos, produtos):
+    def associar_produtos_pedido(self, pedidos):
 
         if not pedidos:
             return pedidos
 
         try:
+            pedidos_array = [x['idPedido'] for x in pedidos['pendentes']]
+            pedidos_array += [x['idPedido'] for x in pedidos['concluidos']]
+            produtos = self.pedidos_rep.get_all_produtos(pedidos_array)
+
             new_produtos = {}
             for item in produtos:
                 if new_produtos.get(item['idPedido']):

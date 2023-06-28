@@ -42,7 +42,7 @@ class RepoPedidos():
 
         return data if data else []
 
-    def get_all_produtos(self, date):
+    def get_all_produtos(self, pedidos_array):
 
         with connections["default"].cursor() as cursor:
             _sql = f"""
@@ -53,7 +53,7 @@ class RepoPedidos():
                     ON p.id = pp.idPedido
                   JOIN produto p2
                     ON pp.idProduto = p2.id
-                 WHERE data = '{date}';
+                 WHERE p.id IN ({",".join(f"'{field}'" for field in pedidos_array)});
             """
 
             cursor.execute(_sql)
@@ -61,7 +61,7 @@ class RepoPedidos():
 
         return data if data else []
 
-    def get_open_orders(self, date):
+    def get_open_orders(self):
         """ BUSCA OS PEDIDOS PENDENTES """
 
         with connections["default"].cursor() as cursor:
@@ -81,8 +81,7 @@ class RepoPedidos():
                     ON p.idEndereco = e.id
                   LEFT JOIN bairro b
                     ON e.bairro = b.id
-                 WHERE p.data = '{date}'
-                   AND p.formaEntrega = 1
+                 WHERE p.formaEntrega = 1
                    AND p.status NOT IN ('CANCELADO', 'CONCLUIDO', 'ENVIADO') 
               ORDER BY p.data, p.hora
                   DESC;
