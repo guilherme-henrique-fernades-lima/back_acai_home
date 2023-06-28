@@ -114,7 +114,7 @@ class RepoPedidos():
         sql_insert = f"""
             INSERT INTO pedido_entrega (idPedido, cliente, celular, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
                  VALUES ({payload['idPedido']}, '{payload['cliente']}', '{payload['celular']}', '{payload['data']}', '{payload['hora']}', '{payload['status']}',
-                         {payload['cpf_motorista']}, '{payload['motorista']}', {payload['cpf_user']}, '{payload['usuario']}');
+                         '{payload['cpf_motorista']}', '{payload['motorista']}', '{payload['cpf_user']}', '{payload['usuario']}');
         """
 
         sql_update = f"""
@@ -153,7 +153,7 @@ class RepoPedidos():
         sql_insert = f"""
             INSERT INTO pedido_entrega (idPedido, cliente, celular, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
                  VALUES ({payload['idPedido']}, '{payload['cliente']}', '{payload['celular']}', '{payload['data']}', '{payload['hora']}', '{payload['status']}',
-                         {payload['cpf_motorista']}, '{payload['motorista']}', {payload['cpf_user']}, '{payload['usuario']}');
+                         '{payload['cpf_motorista']}', '{payload['motorista']}', '{payload['cpf_user']}', '{payload['usuario']}');
         """
 
         sql_update = f"""
@@ -192,7 +192,7 @@ class RepoPedidos():
         sql_insert = f"""
             INSERT INTO pedido_entrega (idPedido, cliente, celular, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
                  VALUES ({payload['idPedido']}, '{payload['cliente']}', '{payload['celular']}', '{payload['data']}', '{payload['hora']}', '{payload['status']}',
-                         {payload['cpf_motorista']}, '{payload['motorista']}', NULL, NULL);
+                         '{payload['cpf_motorista']}', '{payload['motorista']}', NULL, NULL);
         """
 
         sql_update = f"""
