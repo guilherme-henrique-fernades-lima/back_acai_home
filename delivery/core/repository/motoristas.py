@@ -46,7 +46,7 @@ class RepoMotoristas():
         with connections["default"].cursor() as cursor:
 
             sql_pendentes = f"""
-                SELECT pe.*, p.formaPagamento, p.id as "idPedido", p.data as "dt_pedido", p.valor, c.nome, c.celular, e.logradouro , e.numLogr, e.cidade, e.estado, b.nome
+                SELECT pe.*, p.formaPagamento, p.id as "idPedido", p.data as "dt_pedido", p.valor, c.nome, c.celular, e.logradouro , e.numLogr, e.cidade, e.estado, b.nome as "bairro"
                   FROM pedido_entrega pe
                   JOIN pedido p
                     ON pe.idPedido = p.id
@@ -62,7 +62,7 @@ class RepoMotoristas():
             """
 
             sql_concluidos = f"""
-                SELECT pe.*, p.formaPagamento, p.id as "idPedido", p.data as "dt_pedido", p.valor, c.nome, c.celular, e.logradouro , e.numLogr, e.cidade, e.estado, b.nome
+                SELECT pe.*, p.formaPagamento, p.id as "idPedido", p.data as "dt_pedido", p.valor, c.nome, c.celular, e.logradouro , e.numLogr, e.cidade, e.estado, b.nome as "bairro"
                   FROM pedido_entrega pe
                   JOIN pedido p
                     ON pe.idPedido = p.id
