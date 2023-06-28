@@ -18,12 +18,13 @@ class CaseMotoristas():
 
     def associar_produtos_pedido(self, pedidos):
 
-        if not pedidos:
+        pedidos_array = [x['idPedido'] for x in pedidos['pendentes']]
+        pedidos_array += [x['idPedido'] for x in pedidos['concluidos']]
+
+        if not pedidos_array:
             return pedidos
 
         try:
-            pedidos_array = [x['idPedido'] for x in pedidos['pendentes']]
-            pedidos_array += [x['idPedido'] for x in pedidos['concluidos']]
             produtos = self.pedidos_rep.get_all_produtos(pedidos_array)
 
             new_produtos = {}
