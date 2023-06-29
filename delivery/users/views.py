@@ -69,13 +69,10 @@ class UserViewSet(viewsets.ViewSet):
             data = request.data
             user = User.objects.get(cpf=data['cpf'])
 
-            if user.check_password(data['oldPassword']):
-                user.set_password(data['password'])
-                user.save()
+            user.set_password(data['password'])
+            user.save()
 
-                return Response(status=status.HTTP_200_OK)
-
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_200_OK)
 
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
