@@ -112,9 +112,38 @@ class RepoPedidos():
         """ ADICIONA PEDIDO PARA ROTA DE ENTREGA """
 
         sql_insert = f"""
-            INSERT INTO pedido_entrega (idPedido, cliente, celular, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
-                 VALUES ({payload['idPedido']}, '{payload['cliente']}', '{payload['celular']}', '{payload['data']}', '{payload['hora']}', '{payload['status']}',
-                         '{payload['cpf_motorista']}', '{payload['motorista']}', '{payload['cpf_user']}', '{payload['usuario']}')
+            INSERT INTO pedido_entrega
+                (idPedido,
+	             cliente,
+	             celular,
+	             `data`,
+	             hora,
+	             status,
+	             cpf_motorista,
+	             motorista,
+	             cpf_user,
+	             usuario)
+            VALUES ({payload['idPedido']},
+                '{payload['cliente']}',
+                '{payload['celular']}',
+                '{payload['data']}',
+                '{payload['hora']}',
+                '{payload['status']}',
+                '{payload['cpf_motorista']}',
+                '{payload['motorista']}',
+                '{payload['cpf_user']}',
+                '{payload['usuario']}')
+            ON DUPLICATE KEY
+            UPDATE
+                cliente='{payload['cliente']}',
+                celular='{payload['celular']}',
+                `data`='{payload['data']}',
+                hora='{payload['hora']}',
+                status='{payload['status']}',
+                cpf_motorista='{payload['cpf_motorista']}',
+                motorista='{payload['motorista']}',
+                cpf_user='{payload['cpf_user']}',
+                usuario='{payload['usuario']}';
         """
 
         sql_update = f"""
@@ -127,19 +156,14 @@ class RepoPedidos():
             with connections["default"].cursor() as cursor:
                 cursor.execute(sql_insert)
 
+                cursor.execute(sql_update)
+
                 if cursor.rowcount == 1:
-                    cursor.execute(sql_update)
-
-                    if cursor.rowcount == 1:
-                        connections["default"].commit()
-
-                    else:
-                        connections["default"].rollback()
-                        return {'success': False, 'message': 'operacao falho ao realizar o update!'} 
+                    connections["default"].commit()
 
                 else:
                     connections["default"].rollback()
-                    return {'success': False, 'message': 'operacao falho ao realizar o insert!'} 
+                    return {'success': False, 'message': 'operacao falho ao realizar o update!'} 
 
         except Exception as e:
             connections["default"].rollback()

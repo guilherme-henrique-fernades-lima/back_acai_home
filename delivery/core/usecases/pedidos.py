@@ -57,8 +57,8 @@ class CasePedidos():
 
             atribuir_ped = self.pedidos_rep.enviar_pedido(payload)
 
-            if not atribuir_ped['success']:
-                insert_error += [pedido]
+            if not atribuir_ped.get('success'):
+                insert_error += [id_pedido]
 
         return insert_error
 
@@ -71,8 +71,8 @@ class CasePedidos():
 
             atribuir_ped = self.pedidos_rep.remover_pedido(payload)
 
-            if not atribuir_ped['success']:
-                insert_error += [pedido]
+            if not atribuir_ped.get('success'):
+                insert_error += [id_pedido]
 
         return insert_error
 
