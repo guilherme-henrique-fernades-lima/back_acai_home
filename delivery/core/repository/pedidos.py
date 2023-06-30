@@ -182,7 +182,7 @@ class RepoPedidos():
 
         sql_update = f"""
             UPDATE gtech_pedidos gped
-               SET gped.status = 'EM_ABERTO'
+               SET gped.status = 'ABERTO'
              WHERE gped.id = {payload['idPedido']};
         """
 
