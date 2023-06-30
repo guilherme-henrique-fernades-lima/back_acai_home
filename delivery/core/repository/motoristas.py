@@ -26,13 +26,14 @@ class RepoMotoristas():
         with connections["default"].cursor() as cursor:
 
             _sql = f"""
-                SELECT u.*
-                  FROM users_module_user u
-                  JOIN pedido_entrega ped
-                    ON u.cpf = ped.cpf_motorista
-                 WHERE u.is_active = True
-                   AND u.funcao = 'ENTREGADOR'
-                   AND ped.status NOT IN ('ATRIBUIDO');
+                SELECT umu.*
+                  FROM users_module_user umu
+             LEFT JOIN pedido_entrega pe
+                    ON umu.cpf = pe.cpf_motorista
+                   AND pe.status = 'ATRIBUIDO'
+                 WHERE umu.is_active = True
+                   AND umu.funcao = 'entregador'
+                   AND pe.cpf_motorista IS NULL;
             """
 
             cursor.execute(_sql)
