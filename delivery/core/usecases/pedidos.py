@@ -90,7 +90,7 @@ class CasePedidos():
 
         payload = {
             'data': date.date(),
-            'hora': date.time(),
+            'hora': date.time().strftime("%H:%M:%S"),
             'idPedido': id_pedido,
             'cliente': cliente.get('nome'),
             'celular': cliente.get('celular'),

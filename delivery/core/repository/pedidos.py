@@ -114,7 +114,7 @@ class RepoPedidos():
         sql_insert = f"""
             INSERT INTO pedido_entrega (idPedido, cliente, celular, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
                  VALUES ({payload['idPedido']}, '{payload['cliente']}', '{payload['celular']}', '{payload['data']}', '{payload['hora']}', '{payload['status']}',
-                         '{payload['cpf_motorista']}', '{payload['motorista']}', '{payload['cpf_user']}', '{payload['usuario']}');
+                         '{payload['cpf_motorista']}', '{payload['motorista']}', '{payload['cpf_user']}', '{payload['usuario']}')
         """
 
         sql_update = f"""
@@ -151,9 +151,9 @@ class RepoPedidos():
         """ REMOVE PEDIDO DE ROTA ENTREGA """
 
         sql_insert = f"""
-            INSERT INTO pedido_entrega (idPedido, cliente, celular, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
-                 VALUES ({payload['idPedido']}, '{payload['cliente']}', '{payload['celular']}', '{payload['data']}', '{payload['hora']}', '{payload['status']}',
-                         '{payload['cpf_motorista']}', '{payload['motorista']}', '{payload['cpf_user']}', '{payload['usuario']}');
+            UPDATE pedido_entrega
+               SET `data`='{payload['data']}', hora='{payload['hora']}', status='{payload['status']}', cpf_user='{payload['cpf_user']}', usuario='{payload['usuario']}'
+             WHERE idPedido={payload['idPedido']};
         """
 
         sql_update = f"""
@@ -190,9 +190,9 @@ class RepoPedidos():
         """ FINALIZA PEDIDO DA ROTA DE ENTREGA """
 
         sql_insert = f"""
-            INSERT INTO pedido_entrega (idPedido, cliente, celular, data, hora, status, cpf_motorista, motorista, cpf_user, usuario)
-                 VALUES ({payload['idPedido']}, '{payload['cliente']}', '{payload['celular']}', '{payload['data']}', '{payload['hora']}', '{payload['status']}',
-                         '{payload['cpf_motorista']}', '{payload['motorista']}', NULL, NULL);
+            UPDATE pedido_entrega
+               SET `data`='{payload['data']}', hora='{payload['hora']}', status='{payload['status']}'
+             WHERE idPedido={payload['idPedido']};
         """
 
         sql_update = f"""
