@@ -10,7 +10,7 @@ class RepoPedidos():
 
         filtros = ""
         if status_pedido: 
-            filtros += f"AND p.status = '{status}'"
+            filtros += f"AND p.status = '{status_pedido}'"
 
         if forma_pagamento: 
             filtros += f"AND p.formaPagamento = '{forma_pagamento}'"
