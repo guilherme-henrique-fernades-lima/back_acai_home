@@ -39,10 +39,7 @@ class SocketIO():
         resp = requests.get(WS_URL)
         await self.sio.connect(WS_URL)
 
-        tasks = [
-            self.send_message(data),
-            self.sio.disconnect()
-        ]
+        tasks = [asyncio.create_task(self.send_message(data))]
 
         await asyncio.gather(*tasks)
 
@@ -51,7 +48,8 @@ class SocketIO():
         print("DISPATCH EVENT WEBSOCKET>>>", data)
 
         try:
-            asyncio.run(self.start_server(data=data))
+            asyncio.get_event_loop().run_until_complete(self.start_server(data=data))
+            asyncio.get_event_loop().run_until_complete(self.sio.disconnect())
 
         except Exception as err:
             print(traceback.print_exc())
