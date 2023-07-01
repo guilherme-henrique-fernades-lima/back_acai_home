@@ -219,9 +219,11 @@ class RepoPedidos():
              WHERE idPedido={payload['idPedido']};
         """
 
+        observacao = f", gped.observacao = '{payload['observacao']}'" if payload.get('observacao') else ", gped.observacao = NULL" 
+
         sql_update = f"""
             UPDATE gtech_pedidos gped
-               SET gped.status = 'CONCLUIDO', gped.observacao = '{payload['observacao']}'
+               SET gped.status = 'CONCLUIDO' {observacao}
              WHERE gped.id = {payload['idPedido']};
         """
 
