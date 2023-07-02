@@ -108,6 +108,20 @@ class RepoPedidos():
 
         return data if data else [] 
 
+    def get_info_entrega(self, pedidos_array):
+
+        with connections["default"].cursor() as cursor:
+            _sql = f"""
+                SELECT * FROM pedido_entrega pe
+             WHERE pe.status = 'CONCLUIDO' 
+               AND pe.idPedido IN ({",".join(f"{field}" for field in pedidos_array)});
+            """
+
+            cursor.execute(_sql)
+            data = dictfetchall(cursor)
+
+        return data if data else []
+
     def enviar_pedido(self, payload):
         """ ADICIONA PEDIDO PARA ROTA DE ENTREGA """
 

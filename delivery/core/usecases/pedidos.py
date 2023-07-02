@@ -11,9 +11,14 @@ class CasePedidos():
     def get_pedidos(self, date, status_pedido, forma_pagamento):
 
         pedidos = self.pedidos_rep.get_all(date, status_pedido, forma_pagamento)
-        data = self.associar_produtos_pedido(pedidos)
 
-        return data
+        if not pedidos:
+            return pedidos
+
+        data = self.associar_produtos_pedido(pedidos)
+        data_pedidos = self.associar_entregas(data)
+
+        return data_pedidos
 
     def get_pedidos_pendentes(self):
 
@@ -24,13 +29,13 @@ class CasePedidos():
 
     def associar_produtos_pedido(self, pedidos):
 
-        if not pedidos:
-            return pedidos
+        pedidos_array = [x['id'] for x in pedidos]
+        produtos = self.pedidos_rep.get_all_produtos(pedidos_array)
+
+        if not produtos:
+            return pedidos 
 
         try:
-            pedidos_array = [x['id'] for x in pedidos]
-            produtos = self.pedidos_rep.get_all_produtos(pedidos_array)
-
             new_produtos = {}
             for item in produtos:
                 if new_produtos.get(item['idPedido']):
@@ -47,6 +52,37 @@ class CasePedidos():
 
         except Exception as err:
             print("Ocorreu um erro ao tentar associar os produtos!", err)
+
+    def associar_entregas(self, data):
+
+        pedidos_array = [x['id'] for x in data]
+        entregas = self.pedidos_rep.get_info_entrega(pedidos_array)
+
+        if not entregas:
+            for x in data:
+                x['entrega'] = {}
+            return data
+
+        try:
+
+            new_pedido = {}
+            for item in entregas:
+                new_pedido.update({item['idPedido']: item})
+
+            new_data = []
+            for ped in data:
+                if new_pedido.get(ped['id']):
+                    ped.update({'entrega': new_pedido[ped['id']]})
+
+                else:
+                    ped.update({'entrega': {}})
+
+                new_data += [ped]
+
+            return new_data
+
+        except Exception as err:
+            print("Ocorreu um erro ao tentar associar a entrega!", err)
 
     def enviar_pedido(self, data):
 
