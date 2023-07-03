@@ -23,6 +23,10 @@ class CasePedidos():
     def get_pedidos_pendentes(self):
 
         pedidos = self.pedidos_rep.get_open_orders()
+
+        if not pedidos:
+            return pedidos
+
         data = self.associar_produtos_pedido(pedidos)
 
         return data
