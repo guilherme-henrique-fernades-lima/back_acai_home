@@ -47,7 +47,8 @@ class RepoPedidos():
         with connections["default"].cursor() as cursor:
             _sql = f"""
                 SELECT pp.idPedido, pp.quantidade, pp.valorTotal, pp.obs, pp.numColher,
-                       p2.descricao, p2.valor, p2.imagem, p2.titulo
+                       p2.descricao, p2.valor, p2.imagem, p2.titulo,
+                       p.taxaentrega, p.valor as "vl_pedido"
                   FROM pedido p
                   JOIN pedido_produto pp
                     ON p.id = pp.idPedido
