@@ -291,3 +291,18 @@ class RepoPedidos():
             data = dictfetchall(cursor)
 
         return data[0] if data else [] 
+
+    def get_bairros(self):
+        """ BUSCA TODOS OS BAIRROS CADASTRADOS """
+
+        with connections["default"].cursor() as cursor:
+
+            _sql = f"""
+                SELECT * FROM bairro b
+              ORDER BY b.nome;
+            """
+
+            cursor.execute(_sql)
+            data = dictfetchall(cursor)
+
+        return data if data else [] 

@@ -149,3 +149,16 @@ class PedidosViewSet(viewsets.ModelViewSet):
         except Exception as err:
             print("ERROR>>>", err)
             return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], url_path='bairros')
+    def get_bairros(self, request):
+
+        try:
+            pedido_rep = RepoPedidos()
+            response = pedido_rep.get_bairros()
+
+            return Response(data=response, status=status.HTTP_200_OK)
+
+        except Exception as err:
+            print("ERROR>>>", err)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
