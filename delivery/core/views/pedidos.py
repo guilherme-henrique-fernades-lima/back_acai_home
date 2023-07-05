@@ -76,11 +76,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='entrega')
     def pedidos_entrega(self, request):
 
-        date = request.GET.get("date", datetime.now().date())
+        motorista = request.GET.get("cpf_motorista")
 
         try:
             pedido_rep = RepoPedidos()
-            data = pedido_rep.get_entrega(date)
+            data = pedido_rep.get_entrega(motorista)
 
             if not data:
                 return Response(data={'success': False, 'message': 'nenhum pedido encontrado.'}, status=status.HTTP_404_NOT_FOUND)

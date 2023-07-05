@@ -92,15 +92,19 @@ class RepoPedidos():
 
         return data if data else [] 
 
-    def get_entrega(self, date):
+    def get_entrega(self, motorista):
         """ BUSCA OS PEDIDOS EM ROTA DE ENTREGA """
+
+        cpf = ""
+        if motorista:
+            cpf = f"AND pe.cpf_motorista = '{motorista}'"
 
         with connections["default"].cursor() as cursor:
 
             _sql = f"""
                 SELECT * FROM pedido_entrega pe
                  WHERE pe.status NOT IN ('REMOVIDO', 'CONCLUIDO')
-                   AND pe.data = '{date}';
+                 {cpf};
             """
 
             cursor.execute(_sql)
