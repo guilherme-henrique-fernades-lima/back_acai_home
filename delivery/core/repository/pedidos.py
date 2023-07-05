@@ -62,8 +62,12 @@ class RepoPedidos():
 
         return data if data else []
 
-    def get_open_orders(self):
+    def get_open_orders(self, bairro):
         """ BUSCA OS PEDIDOS PENDENTES """
+
+        filtro = ""
+        if bairro:
+            filtro = f"and b.nome = '{bairro}'"
 
         with connections["default"].cursor() as cursor:
 
@@ -84,6 +88,7 @@ class RepoPedidos():
                     ON e.bairro = b.id
                  WHERE p.formaEntrega = 1
                    AND p.status NOT IN ('CANCELADO', 'CONCLUIDO', 'ENVIADO') 
+                   {filtro}
               ORDER BY p.data, p.hora
                   DESC;
             """

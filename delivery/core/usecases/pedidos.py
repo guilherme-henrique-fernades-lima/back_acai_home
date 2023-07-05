@@ -20,9 +20,9 @@ class CasePedidos():
 
         return data_pedidos
 
-    def get_pedidos_pendentes(self):
+    def get_pedidos_pendentes(self, bairro):
 
-        pedidos = self.pedidos_rep.get_open_orders()
+        pedidos = self.pedidos_rep.get_open_orders(bairro)
 
         if not pedidos:
             return pedidos
