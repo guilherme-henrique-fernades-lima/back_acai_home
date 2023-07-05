@@ -162,3 +162,20 @@ class PedidosViewSet(viewsets.ModelViewSet):
         except Exception as err:
             print("ERROR>>>", err)
             return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], url_path='concluidos')
+    def pedidos_concluidos(self, request):
+
+        date = request.GET.get("date", datetime.now().date())
+        forma_pagamento = request.GET.get("tp_pag")
+        motorista = request.GET.get("cpf_motorista")
+
+        try:
+            pedido_rep = RepoPedidos()
+            response = pedido_rep.get_pedidos_concluidos(date, forma_pagamento, motorista)
+
+            return Response(data=response, status=status.HTTP_200_OK)
+
+        except Exception as err:
+            print("ERROR>>>", err)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)

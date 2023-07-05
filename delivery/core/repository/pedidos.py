@@ -306,3 +306,23 @@ class RepoPedidos():
             data = dictfetchall(cursor)
 
         return data if data else [] 
+
+    def get_pedidos_concluidos(self, date, forma_pagamento, motorista):
+        """ BUSCA OS PEDIDOS ENTREGUES """
+
+        with connections["default"].cursor() as cursor:
+
+            _sql = f"""
+                SELECT p.* FROM pedido p
+                  JOIN pedido_entrega pe
+                    ON p.id = pe.idPedido
+                 WHERE p.formaPagamento = '{forma_pagamento}'
+                   AND pe.status = 'CONCLUIDO' 
+                   AND pe.`data` = '{date}'
+                   AND pe.cpf_motorista = '{motorista}';
+            """
+
+            cursor.execute(_sql)
+            data = dictfetchall(cursor)
+
+        return data if data else []
