@@ -243,11 +243,50 @@ class RepoPedidos():
              WHERE idPedido={payload['idPedido']};
         """
 
-        observacao = f", gped.observacao = '{payload['observacao']}'" if payload.get('observacao') else ", gped.observacao = NULL" 
+        observacao = f"gped.observacao = '{payload['observacao']}'" if payload.get('observacao') else "gped.observacao = NULL" 
 
         sql_update = f"""
             UPDATE gtech_pedidos gped
-               SET gped.status = 'CONCLUIDO' {observacao}
+               SET {observacao}
+             WHERE gped.id = {payload['idPedido']};
+        """
+
+        try:
+            with connections["default"].cursor() as cursor:
+                cursor.execute(sql_insert)
+
+                if cursor.rowcount == 1:
+                    cursor.execute(sql_update)
+
+                    if cursor.rowcount == 1:
+                        connections["default"].commit()
+
+                    else:
+                        connections["default"].rollback()
+                        return {'success': False, 'message': 'operacao falho ao realizar o update!'}
+
+                else:
+                    connections["default"].rollback()
+                    return {'success': False, 'message': 'operacao falho ao realizar o insert!'}
+
+        except Exception as e:
+            connections["default"].rollback()
+            return f'Erro: {str(e)}'
+
+        return {'success': True, 'message': 'operacao realizada com sucesso!'}
+
+    def concluir_pedido(self, payload):
+        """ CONCLUI O PEDIDO DA ROTA DE ENTREGA """
+
+        sql_insert = f"""
+            UPDATE pedido_entrega
+               SET `data`='{payload['data']}', hora='{payload['hora']}', status='{payload['status']}'
+             WHERE idPedido={payload['idPedido']};
+        """
+
+        sql_update = f"""
+            UPDATE gtech_pedidos gped
+               SET gped.status = 'CONCLUIDO'
              WHERE gped.id = {payload['idPedido']};
         """
 

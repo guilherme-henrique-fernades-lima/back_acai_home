@@ -62,7 +62,7 @@ class RepoMotoristas():
                    AND pe.cpf_motorista = '{cpf_motorista}';
             """
 
-            sql_concluidos = f"""
+            sql_finalizados = f"""
                 SELECT pe.*, p.formaPagamento, p.id as "idPedido", p.data as "dt_pedido", p.valor, c.nome, c.celular, e.logradouro , e.numLogr, e.cidade, e.estado, b.nome as "bairro"
                   FROM pedido_entrega pe
                   JOIN pedido p
@@ -74,14 +74,14 @@ class RepoMotoristas():
              LEFT JOIN bairro b
                     ON e.bairro = b.id
                  WHERE pe.data = '{date}'
-                   AND pe.status = 'CONCLUIDO'
+                   AND pe.status = 'FINALIZADO'
                    AND pe.cpf_motorista = '{cpf_motorista}';
             """
 
             cursor.execute(sql_pendentes)
             pendentes = dictfetchall(cursor)
 
-            cursor.execute(sql_concluidos)
+            cursor.execute(sql_finalizados)
             concluidos = dictfetchall(cursor)
 
             data = {

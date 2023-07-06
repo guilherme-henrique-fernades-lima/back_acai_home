@@ -150,6 +150,24 @@ class PedidosViewSet(viewsets.ModelViewSet):
             print("ERROR>>>", err)
             return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['post'], url_path='concluir')
+    def concluir_pedido(self, request):
+
+        data = request.data
+
+        try:
+            if data:
+                pedido_case = CasePedidos()
+                response = pedido_case.concluir_pedido(data)
+
+                return Response(data=response, status=status.HTTP_200_OK)
+
+            return Response(data={'success': False, 'message': 'nenhum pedido informado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as err:
+            print("ERROR>>>", err)
+            return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
+
     @action(detail=False, methods=['get'], url_path='bairros')
     def get_bairros(self, request):
 

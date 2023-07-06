@@ -118,8 +118,15 @@ class CasePedidos():
 
     def finalizar_pedido(self, data):
 
-        payload = self.create_payload_entrega(id_pedido=data['idPedido'], data=data, status="CONCLUIDO")
+        payload = self.create_payload_entrega(id_pedido=data['idPedido'], data=data, status="FINALIZADO")
         finalizar_ped = self.pedidos_rep.finalizar_pedido(payload)
+
+        return finalizar_ped
+
+    def concluir_pedido(self, data):
+
+        payload = self.create_payload_entrega(id_pedido=data['idPedido'], data=data, status="CONCLUIDO")
+        finalizar_ped = self.pedidos_rep.concluir_pedido(payload)
 
         return finalizar_ped
 
