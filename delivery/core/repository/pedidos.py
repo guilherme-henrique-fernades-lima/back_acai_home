@@ -359,7 +359,7 @@ class RepoPedidos():
         with connections["default"].cursor() as cursor:
 
             _sql = f"""
-                SELECT p.* FROM pedido p
+                SELECT * FROM pedido p
                   JOIN pedido_entrega pe
                     ON p.id = pe.idPedido
                  WHERE pe.status = 'CONCLUIDO' 
