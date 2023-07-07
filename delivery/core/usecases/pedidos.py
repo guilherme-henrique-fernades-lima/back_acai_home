@@ -94,7 +94,6 @@ class CasePedidos():
         for id_pedido in data['pedidos']:
 
             payload = self.create_payload_entrega(id_pedido=id_pedido, data=data, status="ATRIBUIDO")
-
             atribuir_ped = self.pedidos_rep.enviar_pedido(payload)
 
             if not atribuir_ped.get('success'):
@@ -108,7 +107,6 @@ class CasePedidos():
         for id_pedido in data['pedidos']:
 
             payload = self.create_payload_entrega(id_pedido=id_pedido, data=data, status="REMOVIDO")
-
             atribuir_ped = self.pedidos_rep.remover_pedido(payload)
 
             if not atribuir_ped.get('success'):
