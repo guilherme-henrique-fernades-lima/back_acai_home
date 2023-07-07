@@ -348,16 +348,24 @@ class RepoPedidos():
     def get_pedidos_concluidos(self, date, forma_pagamento, motorista):
         """ BUSCA OS PEDIDOS ENTREGUES """
 
+        form_pag = ""
+        if forma_pagamento:
+            form_pag = f"AND p.formaPagamento = '{forma_pagamento}'"
+
+        cpf = ""
+        if motorista:
+            cpf = f"AND pe.cpf_motorista = '{motorista}'"
+
         with connections["default"].cursor() as cursor:
 
             _sql = f"""
                 SELECT p.* FROM pedido p
                   JOIN pedido_entrega pe
                     ON p.id = pe.idPedido
-                 WHERE p.formaPagamento = '{forma_pagamento}'
-                   AND pe.status = 'CONCLUIDO' 
+                 WHERE pe.status = 'CONCLUIDO' 
                    AND pe.`data` = '{date}'
-                   AND pe.cpf_motorista = '{motorista}';
+                   {cpf}
+                   {form_pag};
             """
 
             cursor.execute(_sql)
