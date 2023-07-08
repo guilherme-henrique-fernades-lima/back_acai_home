@@ -240,7 +240,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 },
                 'data': []
             } 
-
+           
             return Response(data=payload_error, status=status.HTTP_400_BAD_REQUEST)
             
-           #return Response(data={'success': False, 'message': str(err)}, status=status.HTTP_400_BAD_REQUEST)
