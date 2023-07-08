@@ -77,8 +77,7 @@ class RepoPedidos():
                        #e.cep, e.cidade, e.estado,
                        e.logradouro, e.numLogr, e.complLogr, e.pontoreferencia,
                        b.nome as "bairro"
-                  #FROM pedido p
-                  FROM gtech_pedidos p
+                  FROM pedido p
                   LEFT JOIN cliente c
                     ON p.idCliente = c.id
                   LEFT JOIN endereco e
@@ -170,7 +169,7 @@ class RepoPedidos():
         """
 
         sql_update = f"""
-            UPDATE gtech_pedidos gped
+            UPDATE pedido gped
                SET gped.status = 'ENVIADO'
              WHERE gped.id = {payload['idPedido']};
         """
@@ -204,7 +203,7 @@ class RepoPedidos():
         """
 
         sql_update = f"""
-            UPDATE gtech_pedidos gped
+            UPDATE pedido gped
                SET gped.status = 'ABERTO'
              WHERE gped.id = {payload['idPedido']};
         """
@@ -245,7 +244,7 @@ class RepoPedidos():
         observacao = f"gped.observacao = '{payload['observacao']}'" if payload.get('observacao') else "gped.observacao = NULL" 
 
         sql_update = f"""
-            UPDATE gtech_pedidos gped
+            UPDATE pedido gped
                SET {observacao}
              WHERE gped.id = {payload['idPedido']};
         """
@@ -284,7 +283,7 @@ class RepoPedidos():
         """
 
         sql_update = f"""
-            UPDATE gtech_pedidos gped
+            UPDATE pedido gped
                SET gped.status = 'CONCLUIDO'
              WHERE gped.id = {payload['idPedido']};
         """
